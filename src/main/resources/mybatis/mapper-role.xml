@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.atcrowdfunding.dao.RoleDao" >
+
+	<select id="rolePage" resultType="com.atguigu.atcrowdfunding.bean.Role">
+		select * from role
+			<where>
+				<if test="queryText !=null" >
+					and name like concat('%',#{queryText},'%') 
+				</if>
+		</where>
+				order by createtime desc	
+				
+				limit #{start},#{size}
+	</select>
+	
+	<select id="pageQueryCount" resultType="int"> 
+		select count(*) from role 
+		<where>
+			<if test="queryText !=null" >
+				and name like concat('%',#{queryText},'%') 
+			</if>
+		</where>
+	</select>
+	<insert id="insertRole">
+		insert into role(name,createtime) values(#{name},#{createtime})
+	</insert>
+	<update id="updateRole">
+		update role set name=#{name} where id=#{id}
+	</update>
+	
+	<delete id="deleteRoles">
+		delete from role where id in 
+		<foreach collection="ids" item="roleid" open="(" separator="," close=")" >
+			#{roleid}
+		</foreach>
+	</delete>
+	
+</mapper>
